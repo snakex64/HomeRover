@@ -6,7 +6,7 @@
 
 class rover_esp32 : public rclcpp::Node {
 public:
-    rover_esp32() : Node("rover_esp32"), i2cAddress(2) {
+    rover_esp32() : Node("rover_esp32"), i2cAddress(0x20) {
         this->declare_parameter<int>("frequency", 50);
         int timer_frequency = this->get_parameter("frequency").as_int();
 
