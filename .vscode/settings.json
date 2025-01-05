@@ -1,5 +1,5 @@
 {
-    "cmake.sourceDirectory": "/mnt/c/Users/pasc3/source/repos/HomeRover/src/rover_esp32",
+    "cmake.sourceDirectory": "/mnt/c/Users/pasc3/source/repos/HomeRover/src/home_rover",
     "files.associations": {
         "array": "cpp",
         "string": "cpp",

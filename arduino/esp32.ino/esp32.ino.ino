@@ -15,18 +15,17 @@ const int motorSpeedRightPin = 14; // PWM-capable pin
 const int motorDirectionLeftAPin = 12;
 const int motorDirectionLeftBPin = 13;
 const int motorDirectionRightAPin = 23;
-const int motorDirectionRightBPin = 21;
+const int motorDirectionRightBPin = 19;
 // ----------------------------------------------------------------------------------- Settings
 const int frequency = 30000; // PWM frequency (30 kHz) 
 const int resolution = 8; // Must be changed in "updateSpeedController" if this is modified
 
 void setup() 
 {
-  Serial.begin(9600);
   Wire.begin(0x20); // Setup i2c slave using pin 21 (SCL) and 22(SDA) and #2 address
   Wire.onRequest(requestEvent); // register event
   Wire.onReceive(receiveEvent); // register event
-
+  
   // Configure PWM functionality for each channel
   ledcAttach(motorSpeedLeftPin, frequency, resolution);
   ledcAttach(motorSpeedRightPin, frequency, resolution);
@@ -47,10 +46,8 @@ float currentSpeedRight = -999;
 
 void loop() 
 {
-  Serial.println("Hello Computer");
-
-  delay(10);
-
+  delay(20);
+  
   // Get the average distance traveled on each side
   distanceLeft += ( encoder_left_back.readAndReset() + encoder_left_front.readAndReset() ) / 2;
   distanceRight += ( encoder_right_back.readAndReset() + encoder_right_front.readAndReset() ) / 2;

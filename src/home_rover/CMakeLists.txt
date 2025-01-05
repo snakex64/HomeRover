@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(rover_esp32)
+project(home_rover)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -9,21 +9,35 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED) 
 find_package(std_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
 # Include the wiringPi library 
 find_library(WIRINGPI_LIB NAMES wiringPi PATHS /usr/lib)
 
-add_executable(home_rover src/home_rover.cpp)
-target_include_directories(home_rover PUBLIC
+# ----------------------------------------------------------------------- ESP32
+add_executable(rover_esp32 src/rover_esp32.cpp)
+target_include_directories(rover_esp32 PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include/${PROJECT_NAME}>)
-target_compile_features(home_rover PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+target_compile_features(rover_esp32 PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
 
-ament_target_dependencies(home_rover rclcpp std_msgs)
-target_link_libraries(home_rover ${WIRINGPI_LIB})
+ament_target_dependencies(rover_esp32 rclcpp std_msgs sensor_msgs)
+target_link_libraries(rover_esp32 ${WIRINGPI_LIB})
 
-install(TARGETS home_rover
+# ----------------------------------------------------------------------- IMU
+add_executable(rover_imu src/rover_imu.cpp)
+target_include_directories(rover_imu PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include/${PROJECT_NAME}>)
+target_compile_features(rover_imu PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+
+ament_target_dependencies(rover_imu rclcpp std_msgs sensor_msgs)
+target_link_libraries(rover_imu ${WIRINGPI_LIB})
+
+install(TARGETS rover_imu
   DESTINATION lib/${PROJECT_NAME})
+
+
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
